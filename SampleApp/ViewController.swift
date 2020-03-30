@@ -53,13 +53,7 @@ class ViewController: UIViewController {
         // needs to be called BEFORE ending refresh
         updateData()
 
-        if #available(iOS 13.0, *) {
-            // DispatchQueue.main.async can sometimes help
-            tableView.refreshControl?.endRefreshing()
-        }
-        else {
-            tableView.refreshControl?.endRefreshing()
-        }
+        tableView.refreshControl?.endRefreshing()
     }
 }
 
@@ -79,6 +73,7 @@ extension ViewController : UITableViewDataSource {
 extension ViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         // if estimated height is too big it will cause UINavigationBar positionning issues (at least on iOS 13)
+        // EDIT: extendedLayoutIncludesOpaqueBars = true fixes it a lot, but it sometimes still happen. mostly on first refreshs
         return 20
     }
     
