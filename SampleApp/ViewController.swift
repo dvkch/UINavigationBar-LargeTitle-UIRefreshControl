@@ -72,8 +72,7 @@ extension ViewController : UITableViewDataSource {
 
 extension ViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        // if estimated height is too big it will cause UINavigationBar positionning issues (at least on iOS 13)
-        // EDIT: extendedLayoutIncludesOpaqueBars = true fixes it a lot, but it sometimes still happen. mostly on first refreshs
+        // if estimated height bigger than actuel cell height after layout (say 800) it will cause UINavigationBar positionning issues on iOS 13. works on iOS 12
         return 20
     }
     
