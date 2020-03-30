@@ -12,6 +12,11 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // fixes navigationBar not contracting after endResfresh is called on iOS 12 & opaque navBar. better
+        // than toggling `navigationController?.navigationBar.isTranslucent` off then on.
+        // also makes the refreshControl visible during loading, and doesn't impact translucent navBars
+        extendedLayoutIncludesOpaqueBars = true
+
         updateData()
 
         let refreshControl = UIRefreshControl()
@@ -39,7 +44,6 @@ class ViewController: UIViewController {
     
     // MARK: Actions
     @objc private func refreshControlTick() {
-        // on iOS 12 the refreshControl disappears at this point, don't know how to fix it, except disable large titles
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.stopLoading()
         }
@@ -53,13 +57,8 @@ class ViewController: UIViewController {
             // DispatchQueue.main.async can sometimes help
             tableView.refreshControl?.endRefreshing()
         }
-        else if #available(iOS 12.0, *) {
+        else {
             tableView.refreshControl?.endRefreshing()
-            // fix large title nav bar stuck, for iOS 12, but results in un-animated jump
-            // https://stackoverflow.com/a/48176010/1439489
-            // it also screws up navBar when it is translucent
-            navigationController?.navigationBar.isTranslucent = true
-            navigationController?.navigationBar.isTranslucent = false
         }
     }
 }
